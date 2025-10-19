@@ -1,124 +1,364 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Guía 7 - Árboles Binarios</title>
+
+  <!-- Fuente moderna -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
   <style>
-    body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      margin: 40px;
-      background-color: #f3ecfa;
-      color: #333;
-      line-height: 1.7;
+    :root{
+      --bg: #f3ecfa;
+      --card: #ffffff;
+      --muted: #6b5f82;
+      --accent: #7a42c5;
+      --accent-2: #b49dd8;
+      --text: #2b2640;
+      --glass: rgba(255,255,255,0.6);
+      --radius: 14px;
+      --shadow-1: 0 6px 20px rgba(72, 46, 120, 0.08);
+      --shadow-2: 0 10px 30px rgba(74, 34, 121, 0.08);
     }
-    header {
-      background: linear-gradient(90deg, #b49dd8, #9575cd);
+
+    /* Dark theme overrides */
+    :root.dark{
+      --bg: #0f1020;
+      --card: #0f1220;
+      --muted: #bfb8d9;
+      --accent: #9b7be0;
+      --accent-2: #6b4ea8;
+      --text: #e8e6f6;
+      --glass: rgba(255,255,255,0.03);
+      --shadow-1: 0 6px 20px rgba(0,0,0,0.7);
+      --shadow-2: 0 10px 30px rgba(0,0,0,0.6);
+    }
+
+    html,body{
+      height:100%;
+      margin:0;
+      background: linear-gradient(180deg,var(--bg),#efe7fb 200px);
+      font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      color:var(--text);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.6;
+    }
+
+    .wrap{
+      max-width:1100px;
+      margin:36px auto;
+      padding:20px;
+    }
+
+    header.app-header{
+      display:flex;
+      gap:20px;
+      align-items:center;
+      background: linear-gradient(90deg,var(--accent-2),var(--accent));
       color: #fff;
-      padding: 30px;
-      border-radius: 15px;
-      text-align: center;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      padding:28px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-2);
     }
-    header h1 {
-      margin-bottom: 10px;
+
+    .logo{
+      width:86px;
+      height:86px;
+      border-radius:12px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04));
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-shrink:0;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.12) inset;
     }
-    section {
-      background: #fff;
-      padding: 25px;
-      margin-top: 25px;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(149,117,205,0.2);
-      border-left: 8px solid #b49dd8;
+
+    .logo svg{ filter: drop-shadow(0 4px 12px rgba(0,0,0,0.18)); }
+
+    header .header-body{
+      flex:1;
     }
-    h2, h3 {
-      color: #4b2c73;
+    header h1{ margin:0 0 6px 0; font-size:20px; font-weight:700; letter-spacing:0.2px;}
+    header .meta{ opacity:0.95; font-size:13px; margin:0.1rem 0;}
+    header .controls{
+      display:flex;
+      gap:10px;
+      align-items:center;
     }
-    ul, ol {
-      margin-left: 25px;
+
+    .btn{
+      background:rgba(255,255,255,0.12);
+      border: none;
+      color: #fff;
+      padding:8px 12px;
+      border-radius:10px;
+      cursor:pointer;
+      font-weight:600;
+      font-size:13px;
+      transition: transform .12s ease, background .12s;
     }
-    a {
-      color: #7a42c5;
-      text-decoration: none;
+    .btn:active{ transform:translateY(1px); }
+    .btn.secondary{ background: rgba(255,255,255,0.08); }
+
+    .main{
+      display:grid;
+      grid-template-columns: 260px 1fr;
+      gap:22px;
+      margin-top:20px;
     }
-    a:hover {
-      text-decoration: underline;
+
+    /* Sidebar / TOC */
+    aside.toc{
+      position:sticky;
+      top:28px;
+      align-self:start;
+      background:var(--card);
+      border-radius:12px;
+      padding:16px;
+      box-shadow: var(--shadow-1);
+      border:1px solid rgba(124,86,187,0.06);
+      height:fit-content;
     }
-    p {
-      text-align: justify;
+    .toc h3{ margin:0 0 8px 0; font-size:14px; color:var(--muted); }
+    .toc a{
+      display:block;
+      color:var(--accent);
+      text-decoration:none;
+      padding:6px 0;
+      font-size:14px;
+    }
+    .toc a:hover{ text-decoration:underline; opacity:0.95; }
+
+    /* Content cards */
+    .content{
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+    }
+    section.card{
+      background: linear-gradient(180deg,var(--card), var(--glass));
+      border-radius:12px;
+      padding:22px;
+      box-shadow: var(--shadow-1);
+      border-left:6px solid var(--accent-2);
+      overflow:hidden;
+    }
+    section.card h2{ margin-top:0; color:var(--accent-2); }
+    section.card h3{ color:var(--muted); margin-bottom:8px; }
+
+    p{ margin:10px 0; color:var(--text); }
+    ul,ol{ margin:10px 0 10px 20px; color:var(--text); }
+
+    /* Question list: use details for collapsible */
+    details { background: rgba(0,0,0,0.02); padding:10px 12px; border-radius:10px; margin:8px 0; border:1px solid rgba(0,0,0,0.04); }
+    :root.dark details{ background: rgba(255,255,255,0.02); }
+    details summary{ cursor:pointer; list-style:none; outline:none; font-weight:600; color:var(--text); }
+    details[open]{ box-shadow: var(--shadow-1); }
+
+    /* Small utilities */
+    .muted{ color:var(--muted); font-size:13px; }
+    .accent-pill{ display:inline-block; padding:6px 10px; background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:#fff; border-radius:999px; font-weight:700; font-size:12px; }
+
+    footer{ margin:18px 0 80px 0; color:var(--muted); font-size:13px; text-align:center; }
+
+    /* Responsive */
+    @media (max-width:980px){
+      .main{ grid-template-columns: 1fr; }
+      aside.toc{ position:relative; top:auto; order:2; }
+    }
+
+    /* Print */
+    @media print{
+      header.app-header, .toc, .controls { display:none !important; }
+      body{ background:white; color:black; }
+      .wrap{ margin:0; padding:0; max-width:100%; }
+      section.card{ border-left:4px solid #ddd; box-shadow:none; }
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Guía de Laboratorio No.7 - Árboles Binarios</h1>
-    <p><strong>Universidad Manuela Beltrán</strong> | Asignatura: Estructuras de Datos | Estudiante: <strong>Natalia Omaña</strong></p>
-    <p>Docente: Fredy Yarney Romero Moreno | Periodo: 2024-2</p>
-  </header>
+  <div class="wrap" id="page">
+    <header class="app-header" role="banner">
+      <div class="logo" aria-hidden="true">
+        <!-- Simple tree icon -->
+        <svg width="46" height="46" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="1" y="17" width="22" height="6" rx="2" fill="rgba(255,255,255,0.08)"/>
+          <circle cx="8" cy="7" r="3.2" fill="white" opacity="0.95"/>
+          <circle cx="16" cy="7" r="3.2" fill="white" opacity="0.95"/>
+          <rect x="11" y="8" width="2.2" height="8" rx="1" fill="white" opacity="0.95"/>
+        </svg>
+      </div>
 
-  <section>
-    <h2>Introducción</h2>
-    <p>Los árboles binarios constituyen una de las estructuras de datos más importantes en la programación moderna. Son la base de sistemas de organización y búsqueda que permiten optimizar el acceso a la información. En su forma más simple, un árbol binario se compone de nodos donde cada uno puede tener hasta dos hijos, denominados hijo izquierdo e hijo derecho. Este modelo de jerarquía resulta muy útil para representar relaciones dependientes o jerárquicas, como estructuras familiares, jerarquías organizacionales o la forma en la que los sistemas operativos almacenan archivos.</p>
-    <p>En el contexto de la ingeniería de software, los árboles binarios ofrecen una representación eficiente de estructuras dinámicas que cambian con el tiempo. Su naturaleza recursiva permite crear algoritmos elegantes para operaciones como búsqueda, inserción, eliminación o recorrido. En el lenguaje Java, su implementación requiere comprender principios de la Programación Orientada a Objetos, dado que cada nodo se puede considerar como un objeto que contiene información y referencias a otros objetos (sus hijos).</p>
-    <p>Su aplicación abarca desde la gestión de bases de datos (árboles B y B+), la representación de expresiones algebraicas, hasta sistemas de compresión de datos como el algoritmo de Huffman. Esta práctica busca fortalecer el pensamiento lógico y algorítmico del estudiante a través del diseño e implementación de estructuras jerárquicas que imitan procesos del mundo real.</p>
-    <p>Al finalizar esta guía, el estudiante será capaz de implementar un árbol binario en Java, comprender sus diferentes recorridos (in-orden, pre-orden y post-orden), realizar operaciones de búsqueda y borrado de nodos, y analizar el rendimiento de sus algoritmos. De igual manera, podrá reflexionar sobre su aplicación en su futuro profesional como ingeniero o desarrollador de software.</p>
-  </section>
+      <div class="header-body">
+        <h1>Guía de Laboratorio No.7 - Árboles Binarios</h1>
+        <p class="meta"><strong>Universidad Manuela Beltrán</strong> | Asignatura: Estructuras de Datos | Estudiante: <strong>Natalia Omaña</strong></p>
+        <p class="meta">Docente: Fredy Yarney Romero Moreno | Periodo: 2024-2</p>
+      </div>
 
-  <section>
-    <h2>Preguntas de la Introducción</h2>
-    <ol>
-      <li><strong>¿Qué es un árbol binario?</strong> Un árbol binario es una estructura de datos no lineal que organiza los elementos en niveles jerárquicos, donde cada nodo puede tener como máximo dos hijos. Esta estructura facilita operaciones eficientes de búsqueda y almacenamiento, siendo una de las más utilizadas en el desarrollo de algoritmos avanzados.</li>
-      <li><strong>¿Por qué estudiar árboles binarios?</strong> Estudiar árboles binarios permite comprender cómo se manejan grandes volúmenes de información mediante métodos estructurados. Además, muchos algoritmos modernos, como los utilizados en bases de datos, sistemas de archivos o compresión de datos, se fundamentan en árboles. Entenderlos ayuda a diseñar software más rápido, seguro y escalable.</li>
-      <li><strong>¿Qué objetivos perseguimos en esta práctica?</strong> Analizar las características de los árboles binarios, implementar nodos y recorridos en Java, y aplicar estos conocimientos en ejercicios prácticos que refuercen la comprensión teórica. También, fomentar la autonomía en la investigación de variantes como los árboles B, B+ y AVL.</li>
-      <li><strong>¿Qué haremos en la sesión?</strong> Durante las sesiones se abordarán tanto conceptos teóricos como ejercicios prácticos: desde la creación de árboles binarios simples hasta la implementación de árboles de búsqueda y algoritmos de codificación como el de Huffman. Cada sesión busca que el estudiante aplique la lógica de programación y visualice los resultados en gráficos.</li>
-      <li><strong>¿Cómo lo haremos (metodología)?</strong> A través de la lectura del marco teórico, la práctica guiada en NetBeans, la creación de clases y métodos que representen la estructura del árbol, y la prueba de recorridos con diferentes tipos de datos. Finalmente, se documentará el proceso y se reflexionará sobre los resultados obtenidos.</li>
-      <li><strong>¿Qué resultados se esperan obtener?</strong> Al concluir, el estudiante deberá contar con un código funcional, una representación gráfica del árbol implementado y la capacidad de explicar los algoritmos empleados en cada recorrido. Además, se espera la elaboración de un informe que contenga un análisis comparativo de los árboles estudiados y la aplicación del árbol de Huffman.</li>
-      <li><strong>¿Qué herramientas y recursos usaremos?</strong> NetBeans, el JDK actualizado, documentación oficial de Java, recursos académicos de la UMB, el libro de Luis Joyanes Aguilar <em>Estructuras de Datos en Java</em>, y materiales complementarios de plataformas digitales como OscarBlancarteBlog y Slideshare.</li>
-      <li><strong>¿Qué conocimientos previos son necesarios?</strong> Conocimientos sólidos de Programación Orientada a Objetos, recursividad, clases abstractas, estructuras de datos lineales (listas, pilas, colas) y gestión de memoria. Estos fundamentos permiten comprender la interacción entre nodos y la estructura jerárquica del árbol.</li>
-      <li><strong>¿Qué criterios de evaluación se aplicarán?</strong> Se valorará la implementación correcta de los algoritmos, la claridad del informe, la organización del código, la presentación visual del árbol y la reflexión sobre su aplicación en la ingeniería.</li>
-      <li><strong>¿Qué precauciones y consideraciones éticas?</strong> Respetar la autoría de los recursos utilizados, fomentar el trabajo colaborativo, y mantener buenas prácticas en el desarrollo de software, asegurando la calidad y legibilidad del código.</li>
-    </ol>
-  </section>
+      <div class="controls" role="toolbar" aria-label="Controles">
+        <button class="btn secondary" onclick="window.print()" title="Imprimir guía">Imprimir</button>
+        <button class="btn" id="theme-toggle" title="Alternar modo oscuro">Modo</button>
+      </div>
+    </header>
 
-  <section>
-    <h2>Trabajo Autónomo</h2>
-    <p><strong>Actividad:</strong> Visualizar el video <a href="https://www.youtube.com/watch?v=youbCYe3N3g">Errores que se cometen como desarrollador</a> y redactar un resumen en inglés y en español sobre los principales errores cometidos por los programadores.</p>
+    <main class="main" id="main-content">
+      <aside class="toc" aria-label="Tabla de contenidos">
+        <h3>Contenido</h3>
+        <a href="#introduccion">Introducción</a>
+        <a href="#preguntas-intro">Preguntas de la Introducción</a>
+        <a href="#trabajo-autonomo">Trabajo Autónomo</a>
+        <a href="#preguntas-orientadoras">Preguntas Orientadoras</a>
+        <a href="#presaberes">Presaberes Requeridos</a>
+      </aside>
 
-    <h3>Resumen (Inglés)</h3>
-    <p>The video <em>“Mistakes Developers Make”</em> provides a deep reflection on the recurring errors that affect the performance and efficiency of programmers. It highlights the lack of discipline when following best coding practices, such as not applying consistent naming conventions, ignoring documentation, and neglecting code reviews. The speaker explains that poor time management, insufficient testing, and the tendency to overcomplicate solutions often lead to unstable software. Additionally, communication issues and resistance to teamwork are cited as major barriers to project success. Developers are encouraged to constantly learn, stay updated with new technologies, and maintain an ethical commitment to quality software engineering.</p>
+      <div class="content">
+        <section id="introduccion" class="card" aria-labelledby="intro-title">
+          <h2 id="intro-title">Introducción</h2>
+          <p>Los árboles binarios constituyen una de las estructuras de datos más importantes en la programación moderna. Son la base de sistemas de organización y búsqueda que permiten optimizar el ac[...]
+          <p>En el contexto de la ingeniería de software, los árboles binarios ofrecen una representación eficiente de estructuras dinámicas que cambian con el tiempo. Su naturaleza recursiva permite cr[...]
+          <p>Su aplicación abarca desde la gestión de bases de datos (árboles B y B+), la representación de expresiones algebraicas, hasta sistemas de compresión de datos como el algoritmo de Huffman. [...]
+          <p>Al finalizar esta guía, el estudiante será capaz de implementar un árbol binario en Java, comprender sus diferentes recorridos (in-orden, pre-orden y post-orden), realizar operaciones de bú[...]
+        </section>
 
-    <h3>Resumen (Español)</h3>
-    <p>El video <em>“Errores que se cometen como desarrollador”</em> expone de forma crítica las prácticas inadecuadas más comunes entre los programadores. Entre ellas se encuentran: escribir código desordenado, carecer de comentarios explicativos, no validar el funcionamiento del software antes de entregarlo, y no planificar las tareas de forma adecuada. También se resalta la falta de comunicación entre equipos, el desconocimiento del control de versiones y la poca disposición para actualizar conocimientos. Finalmente, el video invita a los desarrolladores a adoptar una mentalidad proactiva basada en la mejora continua, la disciplina y el trabajo colaborativo para evitar errores costosos en los proyectos profesionales.</p>
-  </section>
+        <section id="preguntas-intro" class="card">
+          <h2>Preguntas de la Introducción</h2>
 
-  <section>
-    <h2>Preguntas Orientadoras</h2>
-    <h3>1. ¿Cuáles fueron los aprendizajes obtenidos al realizar esta guía?</h3>
-    <ul>
-      <li>Comprendí la estructura interna de los árboles binarios y cómo se aplican en diferentes contextos computacionales.</li>
-      <li>Aprendí a implementar nodos, métodos de recorrido y algoritmos de búsqueda y eliminación en Java.</li>
-      <li>Fortalecí mis habilidades para resolver problemas complejos mediante el pensamiento lógico y la recursión.</li>
-      <li>Reconocí la importancia de los árboles como herramientas de modelado de datos jerárquicos y de optimización algorítmica.</li>
-    </ul>
-    <p><strong>Relación con el futuro profesional:</strong> Estos conocimientos son aplicables en el desarrollo de sistemas de información, motores de búsqueda, bases de datos, inteligencia artificial y optimización de procesos de software. La comprensión de estructuras jerárquicas permitirá crear soluciones más eficientes y sostenibles.</p>
+          <ol>
+            <li>
+              <details>
+                <summary><strong>¿Qué es un árbol binario?</strong></summary>
+                <div>
+                  <p>Un árbol binario es una estructura de datos no lineal que organiza los elementos en niveles jerárquicos, donde cada nodo puede tener como máx[...]
+                </div>
+              </details>
+            </li>
+            <li>
+              <details>
+                <summary><strong>¿Por qué estudiar árboles binarios?</strong></summary>
+                <div><p>Estudiar árboles binarios permite comprender cómo se manejan grandes volúmenes de información mediante métodos estructurados. Ade[...]</p></div>
+              </details>
+            </li>
+            <li>
+              <details>
+                <summary><strong>¿Qué objetivos perseguimos en esta práctica?</strong></summary>
+                <div><p>Analizar las características de los árboles binarios, implementar nodos y recorridos en Java, y aplicar estos conocimientos[...]</p></div>
+              </details>
+            </li>
+            <li>
+              <details>
+                <summary><strong>¿Qué haremos en la sesión?</strong></summary>
+                <div><p>Durante las sesiones se abordarán tanto conceptos teóricos como ejercicios prácticos: desde la creación de árboles binarios simples hasta [...]</p></div>
+              </details>
+            </li>
+            <li>
+              <details>
+                <summary><strong>¿Cómo lo haremos (metodología)?</strong></summary>
+                <div><p>A través de la lectura del marco teórico, la práctica guiada en NetBeans, la creación de clases y métodos que representen la estructu[...]</p></div>
+              </details>
+            </li>
+            <li>
+              <details>
+                <summary><strong>¿Qué resultados se esperan obtener?</strong></summary>
+                <div><p>Al concluir, el estudiante deberá contar con un código funcional, una representación gráfica del árbol implementado y la capacidad[...]</p></div>
+              </details>
+            </li>
+            <li>
+              <details>
+                <summary><strong>¿Qué herramientas y recursos usaremos?</strong></summary>
+                <div><p>NetBeans, el JDK actualizado, documentación oficial de Java, recursos académicos de la UMB, el libro de Luis Joyanes Aguilar <em>E[...]</em></p></div>
+              </details>
+            </li>
+            <li>
+              <details>
+                <summary><strong>¿Qué conocimientos previos son necesarios?</strong></summary>
+                <div><p>Conocimientos sólidos de Programación Orientada a Objetos, recursividad, clases abstractas, estructuras de datos lineales (lis[...]</p></div>
+              </details>
+            </li>
+            <li>
+              <details>
+                <summary><strong>¿Qué criterios de evaluación se aplicarán?</strong></summary>
+                <div><p>Se valorará la implementación correcta de los algoritmos, la claridad del informe, la organización del código, la presenta[...]</p></div>
+              </details>
+            </li>
+            <li>
+              <details>
+                <summary><strong>¿Qué precauciones y consideraciones éticas?</strong></summary>
+                <div><p>Respetar la autoría de los recursos utilizados, fomentar el trabajo colaborativo, y mantener buenas prácticas en el desarrol[...]</p></div>
+              </details>
+            </li>
+          </ol>
+        </section>
 
-    <h3>2. ¿Dónde presenté mayor dificultad resolviendo la guía y cómo lo resolví?</h3>
-    <p>La mayor dificultad fue comprender la lógica recursiva en los recorridos de los árboles. Inicialmente, confundía el orden en que se visitaban los nodos, lo que generaba resultados incorrectos. Para resolverlo, revisé ejemplos prácticos en NetBeans y analicé el flujo de ejecución línea por línea. Consulté materiales adicionales de Oscar Blancarte y el libro de Joyanes Aguilar, lo que me permitió visualizar mejor el comportamiento de los algoritmos y afianzar mi comprensión del tema.</p>
-  </section>
+        <section id="trabajo-autonomo" class="card">
+          <h2>Trabajo Autónomo</h2>
+          <p><strong>Actividad:</strong> Visualizar el video <a href="https://www.youtube.com/watch?v=youbCYe3N3g" target="_blank" rel="noopener">Errores que se cometen como desarrollador</a> y redactar un resumen en inglés y en españo[...]
 
-  <section>
-    <h2>Presaberes Requeridos</h2>
-    <ul>
-      <li><strong>Programación Orientada a Objetos:</strong> uso de clases, objetos, encapsulamiento, herencia y polimorfismo para modelar el árbol binario de forma modular.</li>
-      <li><strong>Clases abstractas:</strong> definición de comportamientos generales que deben ser implementados por subclases que representen diferentes tipos de árboles.</li>
-      <li><strong>Tipos de datos abstractos:</strong> comprensión de estructuras dinámicas como listas, pilas y colas, que permiten manejar conjuntos de datos de tamaño variable.</li>
-    </ul>
+          <h3>Resumen (Inglés)</h3>
+          <p>The video <em>“Mistakes Developers Make”</em> provides a deep reflection on the recurring errors that affect the performance and efficiency of programmers. It highlights the lack of discipl[...]
 
-    <h3>Preguntas de repaso</h3>
-    <ol>
-      <li><strong>¿Qué es un grafo?</strong> Un grafo es un conjunto de vértices y aristas donde cada arista une un par de vértices. Se utiliza para representar redes, relaciones o caminos entre distintos elementos, y puede ser dirigido o no dirigido.</li>
-      <li><strong>¿Qué define mejor un árbol binario?</strong> Un árbol binario es un árbol con una raíz en la que cada nodo puede tener cero, uno o dos hijos, distribuidos de manera jerárquica en subárboles izquierdo y derecho.</li>
-      <li><strong>En los recorridos de un árbol, ¿cuál recorre primero los subárboles y luego la raíz?</strong> El recorrido <em>Post-Orden</em> recorre primero los subárboles izquierdo y derecho antes de visitar la raíz, lo que resulta útil para eliminar o evaluar árboles de expresión.</li>
-    </ol>
-  </section>
+          <h3>Resumen (Español)</h3>
+          <p>El video <em>“Errores que se cometen como desarrollador”</em> expone de forma crítica las prácticas inadecuadas más comunes entre los programadores. Entre ellas se encuentran: escribir c[...]
+        </section>
+
+        <section id="preguntas-orientadoras" class="card">
+          <h2>Preguntas Orientadoras</h2>
+
+          <h3>1. ¿Cuáles fueron los aprendizajes obtenidos al realizar esta guía?</h3>
+          <ul>
+            <li>Comprendí la estructura interna de los árboles binarios y cómo se aplican en diferentes contextos computacionales.</li>
+            <li>Aprendí a implementar nodos, métodos de recorrido y algoritmos de búsqueda y eliminación en Java.</li>
+            <li>Fortalecí mis habilidades para resolver problemas complejos mediante el pensamiento lógico y la recursión.</li>
+            <li>Reconocí la importancia de los árboles como herramientas de modelado de datos jerárquicos y de optimización algorítmica.</li>
+          </ul>
+          <p class="muted"><strong>Relación con el futuro profesional:</strong> Estos conocimientos son aplicables en el desarrollo de sistemas de información, motores de búsqueda, bases de datos, inteligencia artific[...]
+
+          <h3>2. ¿Dónde presenté mayor dificultad resolviendo la guía y cómo lo resolví?</h3>
+          <p>La mayor dificultad fue comprender la lógica recursiva en los recorridos de los árboles. Inicialmente, confundía el orden en que se visitaban los nodos, lo que generaba resultados incorrecto[...]
+        </section>
+
+        <section id="presaberes" class="card">
+          <h2>Presaberes Requeridos</h2>
+          <ul>
+            <li><strong>Programación Orientada a Objetos:</strong> uso de clases, objetos, encapsulamiento, herencia y polimorfismo para modelar el árbol binario de forma modular.</li>
+            <li><strong>Clases abstractas:</strong> definición de comportamientos generales que deben ser implementados por subclases que representen diferentes tipos de árboles.</li>
+            <li><strong>Tipos de datos abstractos:</strong> comprensión de estructuras dinámicas como listas, pilas y colas, que permiten manejar conjuntos de datos de tamaño variable.</li>
+          </ul>
+
+          <h3>Preguntas de repaso</h3>
+          <ol>
+            <li><strong>¿Qué es un grafo?</strong> Un grafo es un conjunto de vértices y aristas donde cada arista une un par de vértices. Se utiliza para representar redes, relaciones o caminos entre d[...]
+            <li><strong>¿Qué define mejor un árbol binario?</strong> Un árbol binario es un árbol con una raíz en la que cada nodo puede tener cero, uno o dos hijos, distribuidos de manera jerárquica[...]
+            <li><strong>En los recorridos de un árbol, ¿cuál recorre primero los subárboles y luego la raíz?</strong> El recorrido <em>Post-Orden</em> recorre primero los subárboles izquierdo y derech[...]
+          </ol>
+        </section>
+
+        <footer>
+          <div class="muted">Guía No.7 — Estructuras de Datos • Universidad Manuela Beltrán</div>
+        </footer>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Theme toggle with persistence
+    const root = document.documentElement;
+    const stored = localStorage.getItem('site-theme');
+    if(stored === 'dark') root.classList.add('dark');
+
+    document.getElementById('theme-toggle').addEventListener('click', () => {
+      root.classList.toggle('dark');
+      localStorage.setItem('site-theme', root.classList.contains('dark') ? 'dark' : 'light');
+    });
+
+    // Smooth scrolling for internal links
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{
+      a.addEventListener('click', (e)=>{
+        const target = document.querySelector(a.getAttribute('href'));
+        if(target){ e.preventDefault(); target.scrollIntoView({behavior:'smooth', block:'start'}); }
+      });
+    });
+  </script>
 </body>
 </html>
