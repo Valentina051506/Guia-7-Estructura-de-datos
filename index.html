@@ -18,6 +18,8 @@
       --text: #2b2640;
       --radius: 12px;
       --shadow: 0 8px 30px rgba(121,84,169,0.08);
+      --code-bg: #0f1220;
+      --code-text: #e8e6f6;
     }
     :root.dark{
       --bg: #0f1020;
@@ -27,6 +29,8 @@
       --accent-2: #6b4ea8;
       --text: #e8e6f6;
       --shadow: 0 8px 30px rgba(0,0,0,0.6);
+      --code-bg: #11121a;
+      --code-text: #f3f1ff;
     }
 
     html,body{
@@ -129,6 +133,16 @@
     p{ margin:10px 0; text-align:justify; }
     ul,ol{ margin:10px 0 10px 22px; }
 
+    /* tabla comparativa */
+    table.compare{ width:100%; border-collapse:collapse; margin-top:12px; }
+    table.compare th, table.compare td{ border:1px solid rgba(124,86,187,0.08); padding:10px; text-align:left; vertical-align:top; }
+    table.compare thead th{ background:linear-gradient(90deg, rgba(180,157,216,0.15), rgba(122,66,197,0.06)); color:var(--accent); }
+
+    /* bloque de código estilo oscuro */
+    pre.codeblock{ background:var(--code-bg); color:var(--code-text); padding:16px; border-radius:10px; overflow:auto; font-family: 'Courier New', monospace; font-size:13px; }
+
+    .small{ font-size:13px; color:var(--muted); }
+
     footer{ margin:28px 0; color:var(--muted); text-align:center; font-size:13px; }
 
     @media (max-width:980px){
@@ -141,6 +155,7 @@
       body{ background:white; color:black; }
       .container{ padding:0; margin:0; max-width:100%; }
       section.card{ border-left:4px solid #ddd; box-shadow:none; }
+      pre.codeblock{ background:#f4f4f4; color:#000; }
     }
   </style>
 </head>
@@ -159,6 +174,7 @@
         <div>
           <h1>Guía de Laboratorio No.7 - Árboles Binarios</h1>
           <div class="meta"><strong>Universidad Manuela Beltrán</strong> • Estructuras de Datos • Estudiante: <strong>Natalia Omaña</strong></div>
+          <div class="meta">Docente: Fredy Yarney Romero Moreno • Periodo: 2024-2</div>
           </div>
       </div>
 
@@ -172,10 +188,14 @@
       <aside class="toc" aria-label="Tabla de contenidos">
         <h3>Contenido</h3>
         <a href="#introduccion">Introducción</a>
-        <a href="#preguntas-intro">Preguntas de la Introducción</a>
-        <a href="#trabajo-autonomo">Trabajo Autónomo</a>
+        <a href="#preguntas-intro">Preguntas y Actividades</a>
+        <a href="#situaciones">10 situaciones reales</a>
+        <a href="#comparativo">Comparativo: B / B+ / AVL</a>
+        <a href="#huffman">Huffman (explicación + código)</a>
+        <a href="#presaberes">Presaberes (test)</a>
         <a href="#preguntas-orientadoras">Preguntas Orientadoras</a>
-        <a href="#presaberes">Presaberes Requeridos</a>
+        <a href="#trabajo-autonomo">Trabajo Autónomo (resumen)</a>
+        <a href="#bibliografia">Bibliografía</a>
       </aside>
 
       <div class="content">
@@ -184,65 +204,255 @@
           <p>Los árboles binarios constituyen una de las estructuras de datos más importantes en la programación moderna. Son la base de sistemas de organización y búsqueda que permiten optimizar el acceso a la información. En su forma más simple, un árbol binario se compone de nodos donde cada uno puede tener hasta dos hijos, denominados hijo izquierdo e hijo derecho. Este modelo de jerarquía resulta muy útil para representar relaciones dependientes o jerárquicas, como estructuras familiares, jerarquías organizacionales o la forma en la que los sistemas operativos almacenan archivos.</p>
           <p>En el contexto de la ingeniería de software, los árboles binarios ofrecen una representación eficiente de estructuras dinámicas que cambian con el tiempo. Su naturaleza recursiva permite crear algoritmos elegantes para operaciones como búsqueda, inserción, eliminación o recorrido. En el lenguaje Java, su implementación requiere comprender principios de la Programación Orientada a Objetos, dado que cada nodo se puede considerar como un objeto que contiene información y referencias a otros objetos (sus hijos).</p>
           <p>Su aplicación abarca desde la gestión de bases de datos (árboles B y B+), la representación de expresiones algebraicas, hasta sistemas de compresión de datos como el algoritmo de Huffman. Esta práctica busca fortalecer el pensamiento lógico y algorítmico del estudiante a través del diseño e implementación de estructuras jerárquicas que imitan procesos del mundo real.</p>
-          <p>Al finalizar esta guía, el estudiante será capaz de implementar un árbol binario en Java, comprender sus diferentes recorridos (in-orden, pre-orden y post-orden), realizar operaciones de búsqueda y borrado de nodos, y analizar el rendimiento de sus algoritmos. De igual manera, podrá reflexionar sobre su aplicación en su futuro profesional como ingeniero o desarrollador de software.</p>
         </section>
 
         <section id="preguntas-intro" class="card">
-          <h2>Preguntas de la Introducción</h2>
+          <h2>Preguntas y Actividades de la Guía</h2>
+          <p>En esta sección están las preguntas reales que solicita la guía y las respuestas elaboradas.</p>
           <ol>
-            <li><strong>¿Qué es un árbol binario?</strong> Un árbol binario es una estructura de datos no lineal que organiza los elementos en niveles jerárquicos, donde cada nodo puede tener como máximo dos hijos. Esta estructura facilita operaciones eficientes de búsqueda y almacenamiento, siendo una de las más utilizadas en el desarrollo de algoritmos avanzados.</li>
-            <li><strong>¿Por qué estudiar árboles binarios?</strong> Estudiar árboles binarios permite comprender cómo se manejan grandes volúmenes de información mediante métodos estructurados. Además, muchos algoritmos modernos, como los utilizados en bases de datos, sistemas de archivos o compresión de datos, se fundamentan en árboles. Entenderlos ayuda a diseñar software más rápido, seguro y escalable.</li>
-            <li><strong>¿Qué objetivos perseguimos en esta práctica?</strong> Analizar las características de los árboles binarios, implementar nodos y recorridos en Java, y aplicar estos conocimientos en ejercicios prácticos que refuercen la comprensión teórica. También, fomentar la autonomía en la investigación de variantes como los árboles B, B+ y AVL.</li>
-            <li><strong>¿Qué haremos en la sesión?</strong> Durante las sesiones se abordarán tanto conceptos teóricos como ejercicios prácticos: desde la creación de árboles binarios simples hasta la implementación de árboles de búsqueda y algoritmos de codificación como el de Huffman. Cada sesión busca que el estudiante aplique la lógica de programación y visualice los resultados en gráficos.</li>
-            <li><strong>¿Cómo lo haremos (metodología)?</strong> A través de la lectura del marco teórico, la práctica guiada en NetBeans, la creación de clases y métodos que representen la estructura del árbol, y la prueba de recorridos con diferentes tipos de datos. Finalmente, se documentará el proceso y se reflexionará sobre los resultados obtenidos.</li>
-            <li><strong>¿Qué resultados se esperan obtener?</strong> Al concluir, el estudiante deberá contar con un código funcional, una representación gráfica del árbol implementado y la capacidad de explicar los algoritmos empleados en cada recorrido. Además, se espera la elaboración de un informe que contenga un análisis comparativo de los árboles estudiados y la aplicación del árbol de Huffman.</li>
-            <li><strong>¿Qué herramientas y recursos usaremos?</strong> NetBeans, el JDK actualizado, documentación oficial de Java, recursos académicos de la UMB, el libro de Luis Joyanes Aguilar <em>Estructuras de Datos en Java</em>, y materiales complementarios de plataformas digitales como OscarBlancarteBlog y Slideshare.</li>
-            <li><strong>¿Qué conocimientos previos son necesarios?</strong> Conocimientos sólidos de Programación Orientada a Objetos, recursividad, clases abstractas, estructuras de datos lineales (listas, pilas, colas) y gestión de memoria. Estos fundamentos permiten comprender la interacción entre nodos y la estructura jerárquica del árbol.</li>
-            <li><strong>¿Qué criterios de evaluación se aplicarán?</strong> Se valorará la implementación correcta de los algoritmos, la claridad del informe, la organización del código, la presentación visual del árbol y la reflexión sobre su aplicación en la ingeniería.</li>
-            <li><strong>¿Qué precauciones y consideraciones éticas?</strong> Respetar la autoría de los recursos utilizados, fomentar el trabajo colaborativo, y mantener buenas prácticas en el desarrollo de software, asegurando la calidad y legibilidad del código.</li>
+            <li><strong>Elabore una lista de por lo menos 10 situaciones en las que se presente la estructura de árbol.</strong>
+              <p>Ver sección <a href="#situaciones">"10 situaciones reales"</a> para la lista extendida y ejemplos prácticos.</p>
+            </li>
+
+            <li><strong>Consulte acerca de los árboles B, B+ y AVL. Elabore un cuadro comparativo.</strong>
+              <p>Ver sección <a href="#comparativo">"Comparativo: B / B+ / AVL"</a> para la tabla completa con ventajas, desventajas y usos típicos.</p>
+            </li>
+
+            <li><strong>Investigue sobre: Árbol de códigos Huffman — explique su aplicación en media página y describa su funcionamiento. Construya el código de este algoritmo y explíquelo con ejemplos.</strong>
+              <p>Ver sección <a href="#huffman">"Huffman (explicación + código)"</a> donde incluimos una explicación de ~media página, el código Java funcional y un ejemplo de codificación/decodificación.</p>
+            </li>
+
+            <li><strong>Desarrollo de guía / Presaberes requeridos</strong>
+              <p>Se incluye la sección <a href="#presaberes">"Presaberes"</a> con las preguntas tipo test y sus respuestas correctas.</p>
+            </li>
+
+            <li><strong>Teniendo en cuenta la terminología que se utiliza en teoría de grafos. Identifique la definición correcta de un grafo.</strong>
+              <p class="small"><em>Respuesta correcta:</em> "Un conjunto de vértices y aristas, tal que cada arista está asociada a un par".</p>
+            </li>
+
+            <li><strong>A partir de los conocimientos adquiridos en la guía. Elija la opción que mejor defina a un árbol binario.</strong>
+              <p class="small"><em>Respuesta correcta:</em> "Un árbol binario es un árbol con raíz en el que cada vértice tiene ningún hijo, un hijo o dos hijos."</p>
+            </li>
+
+            <li><strong>En los recorridos que se hace a un árbol, este método se recorre cada uno de los subárboles luego se pasa por la raíz. ¿Cuál es?</strong>
+              <p class="small"><em>Respuesta correcta:</em> <strong>Post-Orden</strong>.</p>
+            </li>
+
           </ol>
         </section>
 
-        <section id="trabajo-autonomo" class="card">
-          <h2>Trabajo Autónomo</h2>
-          <p><strong>Actividad:</strong> Visualizar el video <a href="https://www.youtube.com/watch?v=youbCYe3N3g" target="_blank" rel="noopener">Errores que se cometen como desarrollador</a> y redactar un resumen en inglés y en español sobre los principales errores cometidos por los programadores.</p>
+        <section id="situaciones" class="card">
+          <h2>10 situaciones reales donde se usa la estructura de árbol</h2>
+          <ol>
+            <li><strong>Sistemas de archivos:</strong> La organización de directorios y archivos (folders) en sistemas operativos es un árbol donde cada carpeta puede contener subcarpetas y archivos. Ejemplo: \root → /home → /user → /documents.</li>
+            <li><strong>Índices en bases de datos:</strong> Estructuras B y B+ se usan para indexar columnas y acelerar búsquedas y rangos en grandes volúmenes de datos almacenados en disco.</li>
+            <li><strong>Compresión de datos (Huffman):</strong> El algoritmo de Huffman genera un árbol para asignar códigos de longitud variable según la frecuencia de símbolos.</li>
+            <li><strong>Compiladores y parsers:</strong> Los árboles sintácticos abstractos (AST) representan la estructura de sentencias y expresiones de un programa para su análisis y optimización.</li>
+            <li><strong>Motores de búsqueda y autocompletado:</strong> Tries y árboles de prefijos facilitan la búsqueda rápida de sugerencias y palabras a partir de prefijos ingresados.</li>
+            <li><strong>Inteligencia artificial (árboles de decisión):</strong> Para clasificación y toma de decisiones (por ejemplo, algoritmos CART, ID3).</li>
+            <li><strong>Representación de expresiones matemáticas:</strong> Los árboles de expresión se usan para evaluar y transformar fórmulas algebraicas o lógicas.</li>
+            <li><strong>Jerarquías organizacionales:</strong> Organigramas y estructuras empresariales, donde cada puesto puede reportar a uno superior.</li>
+            <li><strong>DOM en navegadores:</strong> El Document Object Model (DOM) representa HTML/XML como un árbol de nodos que permite manipular el documento con JavaScript.</li>
+            <li><strong>Sistemas de archivos de bases de datos y B-trees en almacenamiento:</strong> Organización y recuperación eficiente de registros mediante nodos y punteros en discos.</li>
+          </ol>
 
-          <h3>Resumen (Inglés)</h3>
-          <p>The video <em>“Mistakes Developers Make”</em> provides a deep reflection on the recurring errors that affect the performance and efficiency of programmers. It highlights the lack of discipline when following best coding practices, such as not applying consistent naming conventions, ignoring documentation, and neglecting code reviews. The speaker explains that poor time management, insufficient testing, and the tendency to overcomplicate solutions often lead to unstable software. Additionally, communication issues and resistance to teamwork are cited as major barriers to project success. Developers are encouraged to constantly learn, stay updated with new technologies, and maintain an ethical commitment to quality software engineering.</p>
+          <p>Si deseas, puedo expandir cada situación con un pequeño diagrama o ejemplo de código que ilustre su uso — dime cuáles quieres profundizar.</p>
+        </section>
 
-          <h3>Resumen (Español)</h3>
-          <p>El video <em>“Errores que se cometen como desarrollador”</em> expone de forma crítica las prácticas inadecuadas más comunes entre los programadores. Entre ellas se encuentran: escribir código desordenado, carecer de comentarios explicativos, no validar el funcionamiento del software antes de entregarlo, y no planificar las tareas de forma adecuada. También se resalta la falta de comunicación entre equipos, el desconocimiento del control de versiones y la poca disposición para actualizar conocimientos. Finalmente, el video invita a los desarrolladores a adoptar una mentalidad proactiva basada en la mejora continua, la disciplina y el trabajo colaborativo para evitar errores costosos en los proyectos profesionales.</p>
+        <section id="comparativo" class="card">
+          <h2>Comparativo: Árbol B • Árbol B+ • Árbol AVL</h2>
+          <table class="compare" aria-label="Comparativo B B+ AVL">
+            <thead>
+              <tr>
+                <th>Característica</th>
+                <th>Árbol B</th>
+                <th>Árbol B+</th>
+                <th>Árbol AVL</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Definición</td>
+                <td>Árbol balanceado de orden m; claves y punteros pueden estar en nodos internos y hojas.</td>
+                <td>Variación de B: las claves reales se almacenan solo en hojas; nodos internos guían búsquedas; hojas enlazadas para escaneo secuencial.</td>
+                <td>Árbol binario de búsqueda autobalanceado que mantiene la diferencia de altura entre hijos ≤ 1 mediante rotaciones.</td>
+              </tr>
+              <tr>
+                <td>Balance</td>
+                <td>Balance por número de claves por nodo (alto fan-out → menor altura).</td>
+                <td>Igual que B; hojas enlazadas facilitan lecturas secuenciales y rangos.</td>
+                <td>Balance estricto por altura (factor de equilibrio -1,0,+1).</td>
+              </tr>
+              <tr>
+                <td>Operaciones (complejidad)</td>
+                <td>Buscar/Insertar/Eliminar: O(log n) en términos de altura; optimizado para I/O con alto fan-out.</td>
+                <td>Similares a B; más eficiente para escaneos de rango y lecturas secuenciales.</td>
+                <td>Buscar/Insertar/Eliminar: O(log n) en memoria; rotaciones mantienen balance tras operaciones.</td>
+              </tr>
+              <tr>
+                <td>Uso típico</td>
+                <td>Índices en bases de datos y sistemas de ficheros donde el acceso a disco es costoso.</td>
+                <td>Índices en bases de datos que requieren lectura de rangos y ordenación eficiente.</td>
+                <td>Estructuras en memoria donde la búsqueda y actualización deben ser rápidas (ej. mapas ordenados).</td>
+              </tr>
+              <tr>
+                <td>Ventaja</td>
+                <td>Reduce accesos a disco (alto fan-out).</td>
+                <td>Mejor para escaneos por rango; hojas enlazadas simplifican recorridos secuenciales.</td>
+                <td>Altamente eficiente en memoria; garantiza búsqueda rápida y balanceada.</td>
+              </tr>
+              <tr>
+                <td>Desventaja</td>
+                <td>Complejidad en splits/merges y manejo de nodos parcialmente llenos.</td>
+                <td>Mayor uso de espacio en hojas; implementación más compleja que B.</td>
+                <td>Rotaciones frecuentes y sobrecosto en inserciones/borrados en casos intensivos.</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section id="huffman" class="card">
+          <h2>Árbol de códigos Huffman</h2>
+          <h3>Explicación y aplicación (≈ media página)</h3>
+          <p>El algoritmo de Huffman es un método de compresión sin pérdida que genera códigos de longitud variable para cada símbolo de un alfabeto, asignando códigos más cortos a símbolos más frecuentes y códigos más largos a símbolos raros. La construcción del código se basa en la construcción de un árbol binario de Huffman: cada símbolo se representa inicialmente como una hoja con su frecuencia. Luego, se seleccionan las dos hojas (o subárboles) con menor frecuencia, se combinan en un nuevo nodo cuya frecuencia es la suma y se reinsertan en la estructura. Repetir hasta que quede un único nodo raíz. Los códigos se obtienen leyendo el árbol desde la raíz a cada hoja (por ejemplo, tomar '0' para la rama izquierda y '1' para la derecha).</p>
+
+          <p>Esta técnica es ampliamente utilizada en formatos de compresión (ZIP, PNG) y en cualquier escenario donde se conozca la distribución de probabilidades de los símbolos. Huffman garantiza que los códigos generados son prefijos (ningún código es prefijo de otro), lo que permite una decodificación única y sin ambigüedad. Es eficiente y relativamente simple de implementar cuando se cuenta con una tabla de frecuencias.</p>
+
+          <h3>Implementación (Java) — código funcional</h3>
+          <pre class="codeblock">// HuffmanCoding.java
+import java.util.*;
+
+public class HuffmanCoding {
+
+    static class Node implements Comparable&lt;Node&gt; {
+        char ch;
+        int freq;
+        Node left, right;
+        Node(char ch, int freq) { this.ch = ch; this.freq = freq; }
+        Node(int freq, Node left, Node right) { this.ch = '\0'; this.freq = freq; this.left = left; this.right = right; }
+        public int compareTo(Node o) { return Integer.compare(this.freq, o.freq); }
+        boolean isLeaf() { return left == null &amp;&amp; right == null; }
+    }
+
+    public static Node buildTree(Map&lt;Character,Integer&gt; freqMap) {
+        PriorityQueue&lt;Node&gt; pq = new PriorityQueue&lt;&gt;();
+        for (Map.Entry&lt;Character,Integer&gt; e : freqMap.entrySet()) pq.add(new Node(e.getKey(), e.getValue()));
+        if (pq.size() == 1) pq.add(new Node('\0', 0));
+        while (pq.size() &gt; 1) {
+            Node a = pq.poll();
+            Node b = pq.poll();
+            pq.add(new Node(a.freq + b.freq, a, b));
+        }
+        return pq.poll();
+    }
+
+    public static void buildCodes(Node node, String prefix, Map&lt;Character,String&gt; codes) {
+        if (node == null) return;
+        if (node.isLeaf()) {
+            codes.put(node.ch, prefix.length() &gt; 0 ? prefix : "0");
+        } else {
+            buildCodes(node.left, prefix + "0", codes);
+            buildCodes(node.right, prefix + "1", codes);
+        }
+    }
+
+    public static String encode(String text, Map&lt;Character,String&gt; codes) {
+        StringBuilder sb = new StringBuilder();
+        for (char c : text.toCharArray()) sb.append(codes.get(c));
+        return sb.toString();
+    }
+
+    public static String decode(String bits, Node root) {
+        StringBuilder sb = new StringBuilder();
+        Node cur = root;
+        for (int i = 0; i &lt; bits.length(); i++) {
+            cur = bits.charAt(i) == '0' ? cur.left : cur.right;
+            if (cur.isLeaf()) { sb.append(cur.ch); cur = root; }
+        }
+        return sb.toString();
+    }
+
+    public static void main(String[] args) {
+        String message = "hola mundo"; // ejemplo
+        Map&lt;Character,Integer&gt; freq = new HashMap&lt;&gt;();
+        for (char c : message.toCharArray()) freq.put(c, freq.getOrDefault(c, 0) + 1);
+
+        Node root = buildTree(freq);
+        Map&lt;Character,String&gt; codes = new HashMap&lt;&gt;();
+        buildCodes(root, "", codes);
+
+        System.out.println("Frecuencias: " + freq);
+        System.out.println("Códigos Huffman:");
+        codes.forEach((k,v)-&gt; System.out.println("'" + k + "' : " + v));
+
+        String encoded = encode(message, codes);
+        System.out.println("\nOriginal: " + message);
+        System.out.println("Codificado: " + encoded);
+
+        String decoded = decode(encoded, root);
+        System.out.println("Decodificado: " + decoded);
+    }
+}
+</pre>
+
+          <h3>Ejemplo de uso y resultado esperado</h3>
+          <p>Con la cadena <code>"hola mundo"</code> el programa calculará las frecuencias de cada carácter, construirá el árbol Huffman, imprimirá los códigos asignados a cada carácter y mostrará la versión codificada (secuencia de bits). Al decodificar esa secuencia con el mismo árbol recuperaremos exactamente el texto original.</p>
+
+          <p class="small">Nota: si se usan caracteres con acentos o diferentes mayúsculas, se considerarán símbolos distintos en el mapa de frecuencias.</p>
+        </section>
+
+        <section id="presaberes" class="card">
+          <h2>Presaberes Requeridos (Test y respuestas)</h2>
+          <p>Estas preguntas verifican conocimientos básicos previos que la guía asume.</p>
+          <ol>
+            <li><strong>¿Qué es un grafo?</strong>
+              <p class="small">Respuesta correcta: <em>Un conjunto de vértices y aristas, tal que cada arista está asociada a un par</em>.</p>
+            </li>
+            <li><strong>¿Qué define mejor un árbol binario?</strong>
+              <p class="small">Respuesta correcta: <em>Un árbol binario es un árbol con raíz en el que cada vértice tiene ningún hijo, un hijo o dos hijos.</em></p>
+            </li>
+            <li><strong>En los recorridos de un árbol, ¿cuál recorre primero los subárboles y luego la raíz?</strong>
+              <p class="small">Respuesta: <strong>Post-Orden</strong>.</p>
+            </li>
+          </ol>
         </section>
 
         <section id="preguntas-orientadoras" class="card">
           <h2>Preguntas Orientadoras</h2>
           <h3>1. ¿Cuáles fueron los aprendizajes obtenidos al realizar esta guía?</h3>
           <ul>
-            <li>Comprendí la estructura interna de los árboles binarios y cómo se aplican en diferentes contextos computacionales.</li>
-            <li>Aprendí a implementar nodos, métodos de recorrido y algoritmos de búsqueda y eliminación en Java.</li>
-            <li>Fortalecí mis habilidades para resolver problemas complejos mediante el pensamiento lógico y la recursión.</li>
-            <li>Reconocí la importancia de los árboles como herramientas de modelado de datos jerárquicos y de optimización algorítmica.</li>
+            <li><strong>Modelado de datos jerárquicos:</strong> Aprendí a representar sistemas reales mediante árboles, lo que facilita la organización y recuperación de información.</li>
+            <li><strong>Programación recursiva y recorridos:</strong> La práctica consolidó el uso de recursión para operaciones sobre estructuras no lineales.</li>
+            <li><strong>Optimización y diseño algorítmico:</strong> Comprendí la importancia de elegir la estructura adecuada (AVL, B, B+) según requisitos de rendimiento y memoria.</li>
           </ul>
-          <p><strong>Relación con el futuro profesional:</strong> Estos conocimientos son aplicables en el desarrollo de sistemas de información, motores de búsqueda, bases de datos, inteligencia artificial y optimización de procesos de software. La comprensión de estructuras jerárquicas permitirá crear soluciones más eficientes y sostenibles.</p>
+          <p><strong>Relación con el ejercicio profesional:</strong> Estas habilidades son útiles en desarrollo backend, diseño de bases de datos, sistemas embebidos y compresión de datos; permiten construir sistemas más eficientes y mantenibles.</p>
 
-          <h3>2. ¿Dónde presenté mayor dificultad resolviendo la guía y cómo lo resolví?</h3>
-          <p>La mayor dificultad fue comprender la lógica recursiva en los recorridos de los árboles. Inicialmente, confundía el orden en que se visitaban los nodos, lo que generaba resultados incorrectos. Para resolverlo, revisé ejemplos prácticos en NetBeans y analicé el flujo de ejecución línea por línea. Consulté materiales adicionales de Oscar Blancarte y el libro de Joyanes Aguilar, lo que me permitió visualizar mejor el comportamiento de los algoritmos y afianzar mi comprensión del tema.</p>
+          <h3>2. ¿Dónde presenté mayor dificultad y cómo la resolví?</h3>
+          <p>La mayor dificultad se presentó en entender y aplicar correctamente las rotaciones para mantener el balance en árboles AVL y en visualizar el orden de los recorridos recursivos. Se solucionó mediante:</p>
+          <ul>
+            <li>Descomponer problemas en ejemplos pequeños y trazar manualmente los pasos.</li>
+            <li>Instrumentar el código con impresiones (prints) para observar el flujo de ejecución.</li>
+            <li>Consultar fuentes académicas y comparar implementaciones de referencia.</li>
+          </ul>
         </section>
 
-        <section id="presaberes" class="card">
-          <h2>Presaberes Requeridos</h2>
-          <ul>
-            <li><strong>Programación Orientada a Objetos:</strong> uso de clases, objetos, encapsulamiento, herencia y polimorfismo para modelar el árbol binario de forma modular.</li>
-            <li><strong>Clases abstractas:</strong> definición de comportamientos generales que deben ser implementados por subclases que representen diferentes tipos de árboles.</li>
-            <li><strong>Tipos de datos abstractos:</strong> comprensión de estructuras dinámicas como listas, pilas y colas, que permiten manejar conjuntos de datos de tamaño variable.</li>
-          </ul>
+        <section id="trabajo-autonomo" class="card">
+          <h2>Actividad de Trabajo Autónomo</h2>
+          <p><strong>Tarea:</strong> Visualizar el video <a href="https://www.youtube.com/watch?v=youbCYe3N3g" target="_blank" rel="noopener">"Errores que se cometen como desarrollador"</a> y redactar un resumen en inglés (media página).</p>
 
-          <h3>Preguntas de repaso</h3>
-          <ol>
-            <li><strong>¿Qué es un grafo?</strong> Un grafo es un conjunto de vértices y aristas donde cada arista une un par de vértices. Se utiliza para representar redes, relaciones o caminos entre distintos elementos, y puede ser dirigido o no dirigido.</li>
-            <li><strong>¿Qué define mejor un árbol binario?</strong> Un árbol binario es un árbol con una raíz en la que cada nodo puede tener cero, uno o dos hijos, distribuidos de manera jerárquica en subárboles izquierdo y derecho.</li>
-            <li><strong>En los recorridos de un árbol, ¿cuál recorre primero los subárboles y luego la raíz?</strong> El recorrido <em>Post-Orden</em> recorre primero los subárboles izquierdo y derecho antes de visitar la raíz, lo que resulta útil para eliminar o evaluar árboles de expresión.</li>
-          </ol>
+          <h3>Resumen (Inglés) — ejemplo (media página)</h3>
+          <p>The video "Mistakes Developers Make" highlights frequent pitfalls that reduce software quality and team productivity. Key issues discussed include poor coding standards (inconsistent naming, lack of modularization), insufficient automated testing, and neglecting documentation. The speaker also points out that weak communication and lack of code reviews contribute to project delays and defects. Additionally, the video warns against overengineering and ignoring edge-cases or security concerns. Recommended practices include adopting coding conventions, writing unit tests, using version control properly, conducting regular code reviews, and continuous learning. Overall, the message encourages a disciplined, collaborative approach to software development to minimize errors and improve long-term success.</p>
+        </section>
+
+        <section id="bibliografia" class="card">
+          <h2>Bibliografía y Fuentes Consultadas</h2>
+          <ul>
+            <li>Joyanes Aguilar, L. (2008). <em>Estructuras de Datos en Java</em>. McGraw-Hill.</li>
+            <li>Blancarte, O. (2014). <em>Estructura de datos - Árboles</em>. Blog: oscarblancarteblog.com</li>
+            <li>Slideshare - Unidad v Árboles (ejemplos y visualizaciones).</li>
+            <li>Video: "Errores que se cometen como desarrollador" (YouTube).</li>
+            <li>Documentación interna de la Universidad Manuela Beltrán — Guía de laboratorio No.7.</li>
+          </ul>
         </section>
 
         <footer>
