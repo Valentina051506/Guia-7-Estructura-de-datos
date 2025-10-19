@@ -1,35 +1,79 @@
-<section>
-  <h2>Preguntas de la Introducción</h2>
-  <ol>
-    <li><strong>¿Qué es un árbol binario?</strong>
-      <p>Un árbol binario es una estructura jerárquica donde cada nodo tiene como máximo dos hijos (izquierdo y derecho).</p>
-    </li>
-    <li><strong>¿Por qué estudiar árboles binarios?</strong>
-      <p>Son fundamentales para estructuras y algoritmos como BST, AVL, B, B+ y Huffman; permiten operaciones eficientes y refuerzan la recursión.</p>
-    </li>
-    <li><strong>¿Qué objetivos perseguimos en esta práctica?</strong>
-      <p>Comprender teoría, implementar nodos y recorridos en Java, visualizar árboles y comparar estructuras avanzadas.</p>
-    </li>
-    <li><strong>¿Qué haremos en la sesión?</strong>
-      <p>Sesión 1: fundamentos y recorridos. Sesión 2: BST y operaciones. Sesión 3: Huffman y aplicación práctica.</p>
-    </li>
-    <li><strong>¿Cómo lo haremos (metodología)?</strong>
-      <p>Lectura, codificación en Java (NetBeans), pruebas, visualización con Graphics y presentación de informe.</p>
-    </li>
-    <li><strong>¿Qué resultados se esperan obtener?</strong>
-      <p>Código funcional, recorridos correctos, visualizaciones gráficas y un informe con comparativos y ejemplos.</p>
-    </li>
-    <li><strong>¿Qué herramientas y recursos usaremos?</strong>
-      <p>NetBeans, JDK, bibliografía recomendada (Joyanes Aguilar y recursos complementarios), y el video sugerido.</p>
-    </li>
-    <li><strong>¿Qué conocimientos previos son necesarios?</strong>
-      <p>POO, clases abstractas, y estructuras de datos básicas (pilas, colas, listas).</p>
-    </li>
-    <li><strong>¿Qué criterios de evaluación se aplicarán?</strong>
-      <p>Funcionamiento del código, documentación, organización, visualización y evidencia de trabajo autónomo.</p>
-    </li>
-    <li><strong>¿Qué precauciones y consideraciones éticas?</strong>
-      <p>Probar el código antes de ejecutar, citar fuentes, respetar el trabajo en equipo y no modificar equipos sin autorización.</p>
-    </li>
-  </ol>
-</section>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Guía 7 - Árboles Binarios</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 40px; background-color: #f6f8fa; color: #333; }
+    h1, h2, h3 { color: #2c3e50; }
+    section { background: #fff; padding: 20px; margin-bottom: 20px; border-radius: 10px; box-shadow: 0 0 5px rgba(0,0,0,0.1); }
+    ul, ol { margin-left: 20px; }
+    a { color: #1a73e8; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <h1>Guía de Laboratorio No.7 - Árboles Binarios</h1>
+
+  <section>
+    <h2>Introducción</h2>
+    <p>Los árboles binarios son estructuras de datos fundamentales en la programación, especialmente en el desarrollo de software orientado a objetos. Un árbol binario se compone de nodos, donde cada nodo tiene como máximo dos hijos: un hijo izquierdo y un hijo derecho. Su estructura jerárquica permite representar relaciones padre-hijo y facilita la implementación de algoritmos de búsqueda, ordenamiento y organización de datos de forma eficiente.</p>
+    <p>En Java, los árboles binarios se implementan utilizando clases y objetos, lo cual permite modelar relaciones complejas dentro de un sistema. Su aplicación se extiende a áreas como inteligencia artificial, bases de datos, sistemas de archivos y compresión de datos (por ejemplo, mediante los árboles de Huffman). El objetivo principal de esta práctica es que el estudiante comprenda el funcionamiento de los árboles binarios, su recorrido, manipulación e implementación en Java, fortaleciendo su lógica y pensamiento algorítmico.</p>
+  </section>
+
+  <section>
+    <h2>Preguntas de la Introducción</h2>
+    <ol>
+      <li><strong>¿Qué es un árbol binario?</strong> Un árbol binario es una estructura jerárquica donde cada nodo tiene como máximo dos hijos (izquierdo y derecho).</li>
+      <li><strong>¿Por qué estudiar árboles binarios?</strong> Son fundamentales para estructuras y algoritmos como BST, AVL, B, B+ y Huffman; permiten operaciones eficientes y refuerzan la recursión.</li>
+      <li><strong>¿Qué objetivos perseguimos en esta práctica?</strong> Comprender teoría, implementar nodos y recorridos en Java, visualizar árboles y comparar estructuras avanzadas.</li>
+      <li><strong>¿Qué haremos en la sesión?</strong> Sesión 1: fundamentos y recorridos. Sesión 2: BST y operaciones. Sesión 3: Huffman y aplicación práctica.</li>
+      <li><strong>¿Cómo lo haremos (metodología)?</strong> Lectura, codificación en Java (NetBeans), pruebas, visualización con Graphics y presentación de informe.</li>
+      <li><strong>¿Qué resultados se esperan obtener?</strong> Código funcional, recorridos correctos, visualizaciones gráficas y un informe con comparativos y ejemplos.</li>
+      <li><strong>¿Qué herramientas y recursos usaremos?</strong> NetBeans, JDK, bibliografía recomendada (Joyanes Aguilar y recursos complementarios), y el video sugerido.</li>
+      <li><strong>¿Qué conocimientos previos son necesarios?</strong> POO, clases abstractas, y estructuras de datos básicas (pilas, colas, listas).</li>
+      <li><strong>¿Qué criterios de evaluación se aplicarán?</strong> Funcionamiento del código, documentación, organización, visualización y evidencia de trabajo autónomo.</li>
+      <li><strong>¿Qué precauciones y consideraciones éticas?</strong> Probar el código antes de ejecutar, citar fuentes, respetar el trabajo en equipo y no modificar equipos sin autorización.</li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Trabajo Autónomo</h2>
+    <p>Actividad: Ver el video <a href="https://www.youtube.com/watch?v=youbCYe3N3g">Errores que se cometen como desarrollador</a>.</p>
+    <h3>Resumen (Inglés)</h3>
+    <p>The video discusses the most common mistakes developers make, such as not writing clean code, ignoring best practices, poor communication, lack of testing, and not using version control systems. Another frequent error is failing to document code or neglecting teamwork and code reviews. Developers are encouraged to keep learning, write maintainable code, and collaborate effectively.</p>
+    <h3>Resumen (Español)</h3>
+    <p>El video muestra errores comunes de los desarrolladores, como no seguir buenas prácticas, no probar su código, no usar control de versiones, escribir código desordenado o no documentar. También resalta la importancia de trabajar en equipo, comunicarse adecuadamente y mantener una actitud de aprendizaje continuo.</p>
+  </section>
+
+  <section>
+    <h2>Preguntas Orientadoras</h2>
+    <h3>1. ¿Cuáles fueron los aprendizajes obtenidos al realizar esta guía?</h3>
+    <ul>
+      <li>Comprendí el concepto y funcionamiento de los árboles binarios en Java.</li>
+      <li>Aprendí a implementar nodos, recorridos (in-orden, pre-orden, post-orden) y búsquedas.</li>
+      <li>Desarrollé habilidades de análisis para aplicar estructuras de datos a problemas reales.</li>
+    </ul>
+    <p><strong>Relación con el futuro profesional:</strong> Estos conocimientos son fundamentales para diseñar estructuras de información eficientes en aplicaciones de ingeniería, inteligencia artificial, bases de datos o software empresarial.</p>
+
+    <h3>2. ¿Dónde presenté mayor dificultad resolviendo la guía y cómo lo resolví?</h3>
+    <p>La mayor dificultad fue implementar correctamente los recorridos y entender la lógica recursiva de los árboles. Se resolvió analizando ejemplos del libro <em>Estructuras de Datos en Java</em> de Luis Joyanes Aguilar y realizando pruebas en NetBeans para observar los resultados paso a paso.</p>
+  </section>
+
+  <section>
+    <h2>Presaberes Requeridos</h2>
+    <ul>
+      <li>Programación Orientada a Objetos: uso de clases, objetos, métodos y herencia.</li>
+      <li>Clases abstractas: definición e implementación de métodos abstractos en subclases.</li>
+      <li>Tipos de datos abstractos: listas, pilas, colas y árboles.</li>
+    </ul>
+
+    <h3>Preguntas de repaso</h3>
+    <ol>
+      <li><strong>¿Qué es un grafo?</strong> Un grafo es un conjunto de vértices y aristas, tal que cada arista está asociada a un par de vértices.</li>
+      <li><strong>¿Qué define mejor un árbol binario?</strong> Un árbol binario es un árbol con raíz en el que cada vértice tiene ningún hijo, un hijo o dos hijos.</li>
+      <li><strong>En los recorridos de un árbol, ¿cuál recorre primero los subárboles y luego la raíz?</strong> Post-Orden.</li>
+    </ol>
+  </section>
+</body>
+</html>
